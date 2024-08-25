@@ -31,7 +31,7 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
-    // 특정 게시글 수정 페이지 로드
+    // 게시글 수정
     public Board boardModify(Integer id) {
         return boardRepository.findById(id).orElse(null);
     }

@@ -3,7 +3,6 @@ package com.board.board.controller;
 import com.board.board.entity.Board;
 import com.board.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class BoardController {
         boardService.boardDelete(id);
     }
 
-    // 게시글 수정
+     //게시글 수정
     @GetMapping("/modify/{id}")
     public Board boardModify(@PathVariable("id") Integer id) {
         return boardService.boardModify(id);
@@ -52,9 +51,16 @@ public class BoardController {
         boardService.boardUpdate(id, board);
     }
 
-    //cors
-    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
-    public ResponseEntity<Void> handleOptions() {
-        return ResponseEntity.ok().build();
-    }
+    //@GetMapping("/modify/{id}")
+    //public Board boardModify(@PathVariable("id") Integer id) {
+    //    return boardService.boardModify(id);
+    //}
+    //@PostMapping("/update/{id}")
+    //public void boardUpdate(@PathVariable("id") Integer id, Board board) {
+    //    Board boardTemp = boardService.boardView(id);
+    //    boardTemp.setTitle(board.getTitle());
+    //    boardTemp.setContent(board.getContent());
+    //    board.setCreate_date(board.getCreate_date());
+    //    boardService.write(boardTemp);
+    //}
 }
