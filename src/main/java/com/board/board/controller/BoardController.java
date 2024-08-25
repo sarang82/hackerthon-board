@@ -50,17 +50,4 @@ public class BoardController {
     public void boardUpdate(@PathVariable("id") Integer id, @RequestBody Board board) {
         boardService.boardUpdate(id, board);
     }
-
-    //@GetMapping("/modify/{id}")
-    //public Board boardModify(@PathVariable("id") Integer id) {
-    //    return boardService.boardModify(id);
-    //}
-    //@PostMapping("/update/{id}")
-    //public void boardUpdate(@PathVariable("id") Integer id, Board board) {
-    //    Board boardTemp = boardService.boardView(id);
-    //    boardTemp.setTitle(board.getTitle());
-    //    boardTemp.setContent(board.getContent());
-    //    board.setCreate_date(board.getCreate_date());
-    //    boardService.write(boardTemp);
-    //}
 }

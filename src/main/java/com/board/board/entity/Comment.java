@@ -12,15 +12,12 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 public class Comment {
-    public class Board {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer id;
-        private String name;
-        private String content;
-        private Timestamp create_date = Timestamp.valueOf(LocalDateTime.now());
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private Integer boardId; // 게시글 ID (댓글이 속한 게시글을 참조)
+    private String name;
+    private String content;
+    private Timestamp createDate = Timestamp.valueOf(LocalDateTime.now());
 }
-
-
-
