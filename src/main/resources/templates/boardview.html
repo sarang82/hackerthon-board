@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세 페이지</title>
+</head>
+<body>
+    <h1 th:text="${view.title}">제목</h1>
+    <p th:text="${view.content}">내용</p>
+    <a th:href="@{/board/delete(id=${view.id})}">삭제</a>
+</body>
+</html>
