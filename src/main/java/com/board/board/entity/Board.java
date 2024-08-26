@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
+@Data // 기본 생성자, Getter 및 Setter는 @Data 어노테이션으로 제공됨
 public class Board {
 
     @Id
@@ -20,8 +20,12 @@ public class Board {
     private String name = "익명";
     private Timestamp create_date = Timestamp.valueOf(LocalDateTime.now());
 
+    // 여러 게시글을 한 사람이 작성할 수 있음
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
+
+    // 한 개의 게시글이 여러 댓글을 가질 수 있음
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
-
-    // 기본 생성자, Getter 및 Setter는 @Data 어노테이션으로 제공됨
 }
