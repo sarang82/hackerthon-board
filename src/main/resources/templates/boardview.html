@@ -3,10 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>게시글 상세 페이지</title>
+    <script src="http://code.jquery.com/jquery-3.6.3.min.js"></script>
 </head>
 <body>
-    <h1 th:text="${view.title}">제목</h1>
-    <p th:text="${view.content}">내용</p>
-    <a th:href="@{/board/delete(id=${view.id})}">삭제</a>
+<!-- 게시글 내용 -->
+<h1 th:text="${view.title}">제목</h1>
+<p th:text="${view.content}">내용</p>
+<a th:href="@{/board/delete/{id}(id=${view.id})}">삭제</a>
+<a th:href="@{/board/modify/{id}(id=${view.id})}">수정</a>
+
+<ul id="comment-list">
+    <!-- 댓글 리스트를 반복하여 표시 -->
+    <li th:each="comment : ${view.comments}">
+        <p><strong th:text="${comment.name}"></strong> (작성일: <span th:text="${comment.create_date}"></span>): <span th:text="${comment.content}"></span></p>
+        <!-- 댓글 삭제 링크 -->
+        <form th:action="@{/api/comment/delete(id=${comment.id}, boardId=${view.id})}" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit">삭제</button>
+        </form>
+
+
+
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+
+    </li>
+</ul>
+<p th:if="${#lists.isEmpty(comments)}">댓글이 없습니다.</p>
+
+
+<script>
+    function deleteComment(link) {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            fetch(link.href, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();  // 삭제 후 페이지를 새로고침하여 댓글 목록 갱신
+                } else {
+                    alert("댓글 삭제에 실패했습니다.");
+                }
+            });
+        }
+        return false;  // 링크의 기본 동작을 방지
+    }
+</script>
+
+<!-- 댓글 작성 폼 -->
+<h3>댓글 작성</h3>
+<form th:action="@{/api/comment/write}" method="post">
+    <input type="hidden" name="boardId" th:value="${view.id}">
+    <label for="name">작성자:</label>
+    <input id="name" name="name" type="text" placeholder="작성자 이름" required>
+    <br>
+    <label for="content">댓글 내용:</label>
+    <textarea id="content" name="content" placeholder="댓글을 입력하세요" required></textarea>
+    <br>
+    <button type="submit">댓글 작성</button>
+</form>
 </body>
 </html>

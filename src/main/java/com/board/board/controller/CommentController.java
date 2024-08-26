@@ -1,33 +1,50 @@
 package com.board.board.controller;
 
+import com.board.board.entity.Board;
 import com.board.board.entity.Comment;
+import com.board.board.service.BoardService;
 import com.board.board.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/comment")
 public class CommentController {
+
     @Autowired
     private CommentService commentService;
 
-    // 댓글 작성
+    @Autowired
+    private BoardService boardService;
+
     @PostMapping("/write")
-    public void commentWrite(@RequestBody Comment comment){
+    public String commentWrite(@RequestParam("boardId") Integer boardId, @ModelAttribute Comment comment) {
+        Board board = boardService.findById(boardId);
+        comment.setBoard(board);
         commentService.write(comment);
+        return "redirect:/board/view?id=" + boardId;
     }
 
-    // 댓글 삭제
-    @DeleteMapping("/delete/{id}")
-    public void commentDelete(@PathVariable("id") Integer id) {
+    @DeleteMapping("/delete")
+    public String commentDelete(@RequestParam("id") Integer id, @RequestParam("boardId") Integer boardId) {
         commentService.delete(id);
+        return "redirect:/board/view?id=" + boardId;
     }
 
-    // 특정 게시글의 댓글 가져오기
-    @GetMapping("/list/{boardId}")
-    public List<Comment> getCommentsByBoardId(@PathVariable("boardId") Integer boardId) {
-        return commentService.findCommentsByBoardId(boardId);
+    @GetMapping("/view")
+    public String viewBoard(@RequestParam("id") Integer id, Model model) {
+        // 게시글 조회 (게시글 엔티티와 댓글을 포함)
+        Board board = boardService.findById(id);
+        List<Comment> comments = commentService.findCommentsByBoardId(id);
+
+        model.addAttribute("view", board);
+        model.addAttribute("comments", comments);
+
+        return "boardview";  // 댓글 목록을 보여줄 페이지
     }
+
 }

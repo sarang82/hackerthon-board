@@ -45,4 +45,8 @@ public class BoardService {
         existingBoard.setCreate_date(board.getCreate_date());
         boardRepository.save(existingBoard);
     }
+
+    public Board findById(Integer boardId) {
+        return boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("Invalid board Id: " + boardId));
+    }
 }

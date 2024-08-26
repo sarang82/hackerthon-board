@@ -2,52 +2,60 @@ package com.board.board.controller;
 
 import com.board.board.entity.Board;
 import com.board.board.service.BoardService;
+import com.board.board.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/board")
-@CrossOrigin(origins = "*") //여기
+@Controller
 public class BoardController {
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private BoardService boardService;
 
-    // 모든 게시글 리스트를 JSON으로 반환
-    @GetMapping("/list")
-    public List<Board> boardList() {
-        return boardService.boardList();
+    @GetMapping("/board/write")
+    public String boardWriteForm(){
+        return "boardWrite";
     }
 
-    // 특정 게시글을 JSON으로 반환
-    @GetMapping("/view")
-    public Board boardView(@RequestParam("id") Integer id) {
-        return boardService.boardView(id);
-    }
-
-    // 새 게시글 작성
-    @PostMapping("/write")
-    public void boardWrite(@RequestBody Board board) {
+    @PostMapping("/board/writepro")
+    public String boardWritePro(Board board){
         boardService.write(board);
+        return "redirect:/board/write";
     }
 
-    // 게시글 삭제
-    @DeleteMapping("/delete")
-    public void boardDelete(@RequestParam("id") Integer id) {
+    @GetMapping("/board/list")
+    public String boardList(Model model){
+        model.addAttribute("list", boardService.boardList());
+
+        return "boardlist";
+    }
+    @GetMapping("/board/view")
+    public String boardView(Model model, @RequestParam("id") Integer id){
+        Board board = boardService.boardView(id);
+        model.addAttribute("view", board);
+        return "boardview";
+    }
+    @GetMapping("/board/delete")
+    public String boardDelete(@RequestParam("id") Integer id){
         boardService.boardDelete(id);
+        return "redirect:/board/list";
     }
 
-     //게시글 수정
-    @GetMapping("/modify/{id}")
-    public Board boardModify(@PathVariable("id") Integer id) {
-        return boardService.boardModify(id);
+    @GetMapping("/board/modify/{id}")
+    public String boardModify(@PathVariable("id") Integer id, Model model){
+        Board board = boardService.boardView(id);
+        model.addAttribute("board", board);
+        return "boardmodify";
     }
-
-    // 게시글 수정 완료
-    @PostMapping("/modify/update/{id}")
-    public void boardUpdate(@PathVariable("id") Integer id, @RequestBody Board board) {
+    @PostMapping("/board/update/{id}")
+    public String boardUpdate(@PathVariable("id") Integer id, @ModelAttribute Board board) {
         boardService.boardUpdate(id, board);
+        return "redirect:/board/list";
     }
+
 }

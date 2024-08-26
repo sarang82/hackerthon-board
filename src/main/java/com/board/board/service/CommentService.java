@@ -11,15 +11,19 @@ import java.util.List;
 @Service
 public class CommentService {
 
+    private final CommentRepository commentRepository;
+
     @Autowired
-    private CommentRepository commentRepository;
+    public CommentService(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     @Transactional
-    public void write(Comment comment){
+    public void write(Comment comment) {
         commentRepository.save(comment);
     }
 
-    public List<Comment> findCommentsByBoardId(Integer boardId){
+    public List<Comment> findCommentsByBoardId(Integer boardId) {
         return commentRepository.findByBoardId(boardId);
     }
 
@@ -27,4 +31,6 @@ public class CommentService {
     public void delete(Integer id) {
         commentRepository.deleteById(id);
     }
+
+
 }
