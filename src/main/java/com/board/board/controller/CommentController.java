@@ -5,14 +5,12 @@ import com.board.board.entity.Comment;
 import com.board.board.service.BoardService;
 import com.board.board.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/api/comment")
+@RestController
+@RequestMapping("/inhatc/comment/board")
 public class CommentController {
 
     @Autowired
@@ -22,29 +20,21 @@ public class CommentController {
     private BoardService boardService;
 
     @PostMapping("/write")
-    public String commentWrite(@RequestParam("boardId") Integer boardId, @ModelAttribute Comment comment) {
+    public Comment commentWrite(@RequestParam("boardId") Integer boardId, @ModelAttribute Comment comment) {
         Board board = boardService.findById(boardId);
         comment.setBoard(board);
-        commentService.write(comment);
-        return "redirect:/board/view?id=" + boardId;
+        return commentService.write(comment);
     }
 
-    @DeleteMapping("/delete")
-    public String commentDelete(@RequestParam("id") Integer id, @RequestParam("boardId") Integer boardId) {
+    @DeleteMapping("/delete{id}")
+    public void commentDelete(@RequestParam("id") Integer id, @RequestParam("boardId") Integer boardId) {
         commentService.delete(id);
-        return "redirect:/board/view?id=" + boardId;
     }
 
-    @GetMapping("/view")
-    public String viewBoard(@RequestParam("id") Integer id, Model model) {
+    @GetMapping("/view{boardId}")
+    public List<Comment> viewBoard(@PathVariable("boardId") Integer boardId) {
         // 게시글 조회 (게시글 엔티티와 댓글을 포함)
-        Board board = boardService.findById(id);
-        List<Comment> comments = commentService.findCommentsByBoardId(id);
-
-        model.addAttribute("view", board);
-        model.addAttribute("comments", comments);
-
-        return "boardview";  // 댓글 목록을 보여줄 페이지
+        return commentService.findCommentsByBoardId(boardId);
     }
 
 }

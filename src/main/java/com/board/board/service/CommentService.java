@@ -19,8 +19,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void write(Comment comment) {
-        commentRepository.save(comment);
+    public Comment write(Comment comment) {
+        return commentRepository.save(comment);
     }
 
     public List<Comment> findCommentsByBoardId(Integer boardId) {
@@ -31,6 +31,4 @@ public class CommentService {
     public void delete(Integer id) {
         commentRepository.deleteById(id);
     }
-
-
 }

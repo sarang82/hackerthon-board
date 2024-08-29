@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
 </head>
 <body>
-$END$
+<h2>User Registration</h2>
+<form action="/api/user/register" method="post">
+    <label for="stu_id">학번</label><br>
+    <input type="text" id="stu_id" name="stu_id" required><br><br>
+
+    <label for="name">성명:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="gender">성별:</label><br>
+    <input type="text" id="gender" name="gender" required><br><br>
+
+    <input type="submit" value="개인정보 등록">
+</form>
 </body>
 </html>
