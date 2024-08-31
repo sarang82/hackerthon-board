@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ClubComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer comment_id;
 
     // 여러 댓글을 한 게시물이 가질 수 있음
     @ManyToOne

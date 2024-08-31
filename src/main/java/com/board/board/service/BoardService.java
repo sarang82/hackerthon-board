@@ -2,12 +2,10 @@ package com.board.board.service;
 
 import com.board.board.entity.Board;
 import com.board.board.repository.BoardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BoardService {
@@ -18,10 +16,15 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    //게시글 리스트 처리
-    public List<Board> boardList() {
-        return boardRepository.findAll();
+    // 게시글 리스트 처리 - 검색 기능
+    public Page<Board> boardList(Pageable pageable) {
+        return boardRepository.findAll(pageable);
     }
+
+    public Page<Board> boardSearchList(String keyword, Pageable pageable) {
+        return boardRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+    }
+
 
     //특정 게시글 불러오기
     public Board boardView(Integer id) {
@@ -50,9 +53,5 @@ public class BoardService {
 
     public Board findById(Integer boardId) {
         return boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("Invalid board Id: " + boardId));
-    }
-
-    public Page<Board> boardSearch(String keyword, Pageable pageable) {
-        return boardRepository.findByTitleContaining(keyword, pageable);
     }
 }

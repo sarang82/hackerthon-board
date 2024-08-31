@@ -4,9 +4,9 @@ import com.board.board.entity.Board;
 import com.board.board.service.BoardService;
 import com.board.board.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/inhatc/board")
@@ -29,10 +29,16 @@ public class BoardController {
     //    return "redirect:/board/write";
     //}
 
-    @GetMapping("/main")
-    public List<Board> boardList(){
-        return boardService.boardList();
+    @GetMapping("/list")
+    public Page<Board> boardList(@RequestParam(required = false) String keyword, Pageable pageable) {
+        if(keyword == null) {
+            return boardService.boardList(pageable);
+        } else {
+            return boardService.boardSearchList(keyword, pageable);
+        }
     }
+
+
     @GetMapping("/view{id}")
     public Board boardView(@PathVariable("id") Integer id){
         return boardService.boardView(id);
@@ -52,5 +58,4 @@ public class BoardController {
     public Board boardUpdate(@PathVariable("id") Integer id, @RequestBody Board board) {
         return boardService.boardUpdate(id, board);
     }
-
 }
